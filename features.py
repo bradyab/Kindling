@@ -6,6 +6,10 @@ from time import sleep
 
 import config
 import tinder_api as api
+# import cv2
+from PIL import Image
+import urllib
+from io import StringIO
 
 
 '''
@@ -164,5 +168,16 @@ if __name__ == '__main__':
     if api.authverif() == True:
         print("Gathering Data on your matches...")
         match_info = get_match_info()
+        mydata = api.get_self()
+        # # print(mydata)
+        pics = get_photos(mydata)
+        for i in pics:
+            file = urllib.request.urlopen(i)
+            img = Image.open(file)
+            img.show()
+
+
+
     else:
         print("Something went wrong. You were not authorized.")
+
