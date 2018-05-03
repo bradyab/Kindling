@@ -10,7 +10,8 @@ import tinder_api as api
 from PIL import Image
 import urllib
 from io import StringIO
-
+import pynder
+import config
 
 '''
 This file collects important data on your matches,
@@ -167,14 +168,14 @@ def pause():
 if __name__ == '__main__':
     if api.authverif() == True:
         print("Gathering Data on your matches...")
-        match_info = get_match_info()
-        mydata = api.get_self()
+        session = pynder.Session(config.fb_user_id,config.fb_auth_token)
+        print("it worked")        
         # # print(mydata)
         pics = get_photos(mydata)
         for i in pics:
             file = urllib.request.urlopen(i)
             img = Image.open(file)
-            img.show()
+            
 
 
 
