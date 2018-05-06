@@ -6,3 +6,4 @@ __pycache__
 find.py
 *.log
 *.egg-info
+*.jpg
