@@ -12,30 +12,33 @@ import urllib
 from io import StringIO
 import config
 import json
-
+import foldercount
 
 if api.authverif() == True:
         print("Gathering Data on your matches...")
         # print(api.get_self())
-        search =  api.get_recs_v2()
-        ppl= search['data']['results']
-        # print(feat.get_photos(ppl[0]['user']['photos'].key()))
-        # pics = feat.get_photos(ppl[0])
-        pics = feat.get_photos(ppl[0]['user'])
+        y = 1
+        repeats = []
+        while y<500:
 
-        for i in pics:
-            file = urllib.request.urlopen(i)
-            img = Image.open(file)
-            img.save("./images/"+str(time()),'JPEG')
-            # img
-            # img.show()
+            search =  api.get_recs_v2()
+            ppl= search['data']['results']
 
-        # for x in ppl:
-        #     pics = x
-        #     pics = feat.get_photos()
-        #     for i in pics:
-        #         file = urllib.request.urlopen(i)
-        #         img = Image.open(file)
+            for i in range(len(ppl)):
+                
+                if ppl[i]['user']['_id'] in repeats:
+                    pass
+                else:
+                    pics = feat.get_photos(ppl[i]['user'])
+                    path = './images/'
+                    for j in pics:
+                        x = foldercount.numfile(path)+1
+                        file = urllib.request.urlopen(j)
+                        img = Image.open(file)
+                        img.save(path+'userpic'+str(x)+".jpg",'JPEG')
+                    repeats.append(ppl[i]['user']['_id'])
+            
+            y = y + 1
 
             
 

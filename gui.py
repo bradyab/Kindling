@@ -1,48 +1,82 @@
-
 import sys
-from PyQt4.QtWidgets import (QWidget, QToolTip, 
-    QPushButton, QApplication, QDesktopWidget)
-from PyQt4.QtGui import QFont    
-from PyQt4 import QtGui
+import os
 
+from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel
+from PyQt5.QtGui import QIcon, QPixmap
 
-class Example(QWidget):
-    
+import shutil
+import foldercount
+ 
+class App(QWidget):
+    global photoind, pic, pushButton
     def __init__(self):
         super().__init__()
-        
+        self.title = 'Kindling'
+        self.left = 10
+        self.top = 10
+        self.width = 640
+        self.height = 680
+        self.photoind = 1
+        self.photopath = './images/resize/userpic'+ str(self.photoind) +'.jpg'
+        self.datapath = './data/'
+        self.pic = QLabel(self)
         self.initUI()
-        
-        
+
+ 
     def initUI(self):
-        
-        QToolTip.setFont(QFont('SansSerif', 10))
-        
-        self.setToolTip('This is a <b>QWidget</b> widget')
-        
-        buttonSection = QtGui.QSplitter(QtCore.Qt.Horizontal)
-        btn = QPushButton('Button', self)
-        buttonSection.addWidget(btn)
-        buttonSection.addWidget(btn)
-        buttonSection.addWidget(btn)
-        btn.setToolTip('This is a <b>QPushButton</b> widget')
-        btn.resize(btn.sizeHint())
-        btn.move(50, 50)       
-        
-        self.setGeometry(600, 600, 600, 600)
-        self.setWindowTitle('Kindleing')  
-        self.center()  
+        self.setWindowTitle(self.title)
+        self.setGeometry(self.left, self.top, self.width, self.height)
+
+
+        pixmap = QPixmap(self.photopath)
+        self.pic.setPixmap(pixmap)
+
+        self.pushButton = QtWidgets.QPushButton('Dislike',self)
+        self.pushButton.setGeometry(QtCore.QRect(160, 645, 92, 30))
+        self.pushButton.setObjectName("pushButton")
+
+
+        self.pushButton_2 = QtWidgets.QPushButton('Like',self)
+        self.pushButton_2.setGeometry(QtCore.QRect(360, 645, 92, 30))
+        self.pushButton_2.setObjectName("pushButton_2")
+
+        self.pushButton.clicked.connect(self.button1Clicked)
+        self.pushButton_2.clicked.connect(self.button1Clicked)
+
+ 
         self.show()
-    def center(self):
-        
-        qr = self.frameGeometry()
-        cp = QDesktopWidget().availableGeometry().center()
-        qr.moveCenter(cp)
-        self.move(qr.topLeft())
-        
-        
-if __name__ == '__main__':
+    def sortimage(self,decision):
+        if(os.path.exists(self.photopath)):
+            movepath = self.datapath+decision+'/'
+            likecount = foldercount.numfile(movepath)
+            shutil.copyfile(self.photopath, movepath+decision + str(likecount+1)+'.jpg' )
+        else:
+            self.close()
+    def button1Clicked(self):
+        self.sortimage("dislike")
+        self.photoChange()
+
+    def button2Clicked(self):
+        self.sortimage('like')
+        self.photoChange()   
+
+    def photoChange(self):
+        self.photoind = self.photoind + 1
+        self.photopath = './images/resize/userpic'+ str(self.photoind) +'.jpg'
+        pixmap = QPixmap(self.photopath)
+        self.pic.setPixmap(pixmap)
+
+    def keyPressEvent(self, e):
+        if e.key() == Qt.Key_Escape:
+            self.close()
+        elif e.key() == Qt.Key_1:
+            self.button1Clicked()
+        elif e.key() == Qt.Key_2:
+            self.button2Clicked()
     
+if __name__ == '__main__':
     app = QApplication(sys.argv)
-    ex = Example()
+    ex = App()
     sys.exit(app.exec_())
