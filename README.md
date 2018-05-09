@@ -1,4 +1,4 @@
-#Kindling
+# Kindling
 
 First off, I want to give a shoutout to <a href='https://gist.github.com/rtt/10403467#file-tinder-api-documentation-md'>@rtt</a> who initially posted the Tinder API Documentation that I found most of these endpoints on. I am writing this to provide a more up-to-date resource for working with the Tinder API.
 
@@ -462,7 +462,7 @@ With your token ready, add it to tinder_config_ex.py (value for tinder_token). Y
 friend_pingtime_by_name("Joakim Noah") will return the pingtime for only that particular friend.
 The following is a sample result for friends_pingtimes(): </h4>
 
-##Usage
+## Usage
 Install dependencies by running
 `
 pip3 install -r requirements.txt
