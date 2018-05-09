@@ -30,7 +30,7 @@ if api.authverif() == True:
                     pass
                 else:
                     pics = feat.get_photos(ppl[i]['user'])
-                    path = './images/'
+                    path = './prediction/'
                     for j in pics:
                         x = foldercount.numfile(path)+1
                         file = urllib.request.urlopen(j)
