@@ -20,7 +20,7 @@ class App(QWidget):
         self.height = 680
         self.photoind = 1
         self.photopath = './images/resize/userpic'+ str(self.photoind) +'.jpg'
-        self.datapath = './data/'
+        self.datapath = './training_data/'
         self.pic = QLabel(self)
         self.initUI()
 

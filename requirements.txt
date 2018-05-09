@@ -1,0 +1,11 @@
+PIL
+io
+urllib
+config
+json
+PyQt5
+shutil
+numpy
+argparse
+glob
+cv2

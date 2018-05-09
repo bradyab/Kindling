@@ -1,4 +1,4 @@
-# Tinder API Documentation - 2018
+#Kindling
 
 First off, I want to give a shoutout to <a href='https://gist.github.com/rtt/10403467#file-tinder-api-documentation-md'>@rtt</a> who initially posted the Tinder API Documentation that I found most of these endpoints on. I am writing this to provide a more up-to-date resource for working with the Tinder API.
 
@@ -462,49 +462,18 @@ With your token ready, add it to tinder_config_ex.py (value for tinder_token). Y
 friend_pingtime_by_name("Joakim Noah") will return the pingtime for only that particular friend.
 The following is a sample result for friends_pingtimes(): </h4>
 
+##Usage
+Install dependencies by running
 `
-	"Joakim Noah -----> 15 days, 16 hrs 46 min 57 sec"
-	"Carmelo Anthony ------> 0 days, 22 hrs 23 min 45 sec"
-	...
+pip3 install -r requirements.txt
 `
+and make sure to have TensorFlow installed if you intend on training the network to your own preferences.
 
-<h3> Facebook Friends: </h3>
-<h4> Given a name, it returns some profile information and their id. Once you have the ID, then you can call api.get_person(id) to get more in-depth information on your friends. </h4>
+You must authorize Tinder to use your facebook, this can be done by copying **tinder_config.py**, filling in your credentials, and then renaming the copy to **config.py**.
+##Components
+-(Tinder's unofficial api)[https://github.com/fbessez/Tinder]
+-(CV-Tricks CNN tutorial)[https://github.com/sankit1/cv-tricks.com]
+-(PyQt5)[http://pyqt.sourceforge.net/Docs/PyQt5/installation.html]
+-(TensorFlow)[https://www.tensorflow.org/install/]
 
 
-```javascript
-
-{
-	  'Martin Shkreli': {
-	    'photo': [
-	      {
-	        'processedFiles': [
-	          {
-	            'url': 'https://graph.facebook.com/123456789/picture?height=84&width=84',
-	            'height': 84,
-	            'width': 84
-	          },
-	          {
-	            'url': 'https://graph.facebook.com/123456789/picture?height=172&width=172',
-	            'height': 172,
-	            'width': 172
-	          },
-	          {
-	            'url': 'https://graph.facebook.com/123456789/picture?height=320&width=320',
-	            'height': 320,
-	            'width': 320
-	          },
-	          {
-	            'url': 'https://graph.facebook.com/123456789/picture?height=640&width=640',
-	            'height': 640,
-	            'width': 640
-	          }
-	        ]
-	      }
-	    ],
-	    'in_squad': True,
-	    'name': 'Martin Shkreli',
-	    'user_id': '582bf320452u3yy1217f8'
-	  }
-}
-```
