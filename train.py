@@ -46,15 +46,15 @@ y_true_cls = tf.argmax(y_true, dimension=1)
 
 ##Network graph params
 filter_size_conv1 = 3 
-num_filters_conv1 = 160
+num_filters_conv1 = 32
 
 filter_size_conv2 = 3
-num_filters_conv2 = 160
+num_filters_conv2 = 32
 
 filter_size_conv3 = 3
-num_filters_conv3 = 320
+num_filters_conv3 = 64
     
-fc_layer_size = 640
+fc_layer_size = 128
 
 def create_weights(shape):
     return tf.Variable(tf.truncated_normal(shape, stddev=0.05))
@@ -197,7 +197,7 @@ def train(num_iteration):
             epoch = int(i / int(data.train.num_examples/batch_size))    
             
             show_progress(epoch, feed_dict_tr, feed_dict_val, val_loss)
-            saver.save(session, 'dogs-cats-model') 
+            saver.save(session, './like-dislike-model') 
 
 
     total_iterations += num_iteration
