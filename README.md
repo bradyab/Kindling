@@ -15,16 +15,8 @@ Then simply run ** run.py **. This will take a while as it must gather about 100
 
 ![example](example1.png)
 
-##Components
--(Tinder's unofficial api)[https://github.com/fbessez/Tinder]
--(CV-Tricks CNN tutorial)[https://github.com/sankit1/cv-tricks.com]
--(PyQt5)[http://pyqt.sourceforge.net/Docs/PyQt5/installation.html]
--(TensorFlow)[https://www.tensorflow.org/install/]
-
 ## Components
 - [Tinder's unofficial api](https://github.com/fbessez/Tinder)
 - [CV-Tricks CNN tutorial](https://github.com/sankit1/cv-tricks.com)
 - [PyQt5](http://pyqt.sourceforge.net/Docs/PyQt5/installation.html)
 - [TensorFlow](https://www.tensorflow.org/install/)
-
-
