@@ -3,80 +3,151 @@ import os
 
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QDesktopWidget
 from PyQt5.QtGui import QIcon, QPixmap
 
 import shutil
 import foldercount
+import predict
  
 class App(QWidget):
     global photoind, pic, pushButton
     def __init__(self):
         super().__init__()
-        self.title = 'Kindling'
+        self.title = 'Kindling - '+ sys.argv[1]
         self.left = 10
         self.top = 10
         self.width = 640
         self.height = 680
         self.photoind = 1
-        self.photopath = './images/resize/userpic'+ str(self.photoind) +'.jpg'
-        self.datapath = './training_data/'
+        self.photopath = './images/userpic'+ str(self.photoind) +'.jpg'
+        self.trainpath = './training_data/'
+        self.predictpath = './prediction/userpic' + str(self.photoind) + '.jpg'
         self.pic = QLabel(self)
+        if sys.argv[1] == 'predict':
+            self.prediction = predict.predictlikedislike(self.predictpath)
         self.initUI()
+
 
  
     def initUI(self):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
 
+        if sys.argv[1] == 'train':
+            pixmap = QPixmap(self.photopath)
+            pixmap = pixmap.scaled(640,640)
+            self.pic.setPixmap(pixmap)
 
-        pixmap = QPixmap(self.photopath)
-        self.pic.setPixmap(pixmap)
+            self.pushButton_1 = QtWidgets.QPushButton('Dislike',self)
+            self.pushButton_1.setGeometry(QtCore.QRect(160, 645, 92, 30))
+            self.pushButton_1.setObjectName("pushButton")
+            self.pushButton_1.clicked.connect(self.button1Clicked)
 
-        self.pushButton = QtWidgets.QPushButton('Dislike',self)
-        self.pushButton.setGeometry(QtCore.QRect(160, 645, 92, 30))
-        self.pushButton.setObjectName("pushButton")
+            self.pushButton_2 = QtWidgets.QPushButton('Like',self)
+            self.pushButton_2.setGeometry(QtCore.QRect(360, 645, 92, 30))
+            self.pushButton_2.setObjectName("pushButton_2")
+            self.pushButton_2.clicked.connect(self.button1Clicked)
 
+        elif sys.argv[1] == 'predict':
+            pixmap = QPixmap(self.predictpath)
+            pixmap = pixmap.scaled(640,640)
+            self.pic.setPixmap(pixmap)
 
-        self.pushButton_2 = QtWidgets.QPushButton('Like',self)
-        self.pushButton_2.setGeometry(QtCore.QRect(360, 645, 92, 30))
-        self.pushButton_2.setObjectName("pushButton_2")
+            dislikechance = self.prediction[0][0]
+            dislikechance = float("{0:.2f}".format(dislikechance))
+            self.pushButton_3 = QtWidgets.QPushButton('Dislike - ' + str(dislikechance),self)
+            self.pushButton_3.setGeometry(QtCore.QRect(160, 645, 92, 30))
+            self.pushButton_3.setObjectName('pushButton_3')
+            self.pushButton_3.clicked.connect(self.button3Clicked)
 
-        self.pushButton.clicked.connect(self.button1Clicked)
-        self.pushButton_2.clicked.connect(self.button1Clicked)
+            likechance = self.prediction[0][1]
+            likechance = float("{0:.2f}".format(likechance))
+            self.pushButton_4 = QtWidgets.QPushButton('Like - ' + str(likechance), self)
+            self.pushButton_4.setGeometry(QtCore.QRect(360,645, 92, 30))
+            self.pushButton_4.setObjectName('pushButton_4')
+            self.pushButton_4.clicked.connect(self.button4Clicked)
 
- 
+        self.center()
         self.show()
-    def sortimage(self,decision):
+
+    def center(self):
+        qtRectangle = self.frameGeometry()
+        centerPoint = QDesktopWidget().availableGeometry().center()
+        qtRectangle.moveCenter(centerPoint)
+        self.move(qtRectangle.topLeft())
+
+    def sortimagetrain(self,decision):
         if(os.path.exists(self.photopath)):
-            movepath = self.datapath+decision+'/'
+            movepath = self.trainpath+decision+'/'
             likecount = foldercount.numfile(movepath)
             shutil.copyfile(self.photopath, movepath+decision + str(likecount+1)+'.jpg' )
         else:
             self.close()
     def button1Clicked(self):
-        self.sortimage("dislike")
-        self.photoChange()
+        self.sortimagetrain("dislike")
+        self.photoChange("./images/")
 
     def button2Clicked(self):
-        self.sortimage('like')
-        self.photoChange()   
+        self.sortimagetrain('like')
+        self.photoChange("./images/")   
 
-    def photoChange(self):
-        self.photoind = self.photoind + 1
-        self.photopath = './images/resize/userpic'+ str(self.photoind) +'.jpg'
-        pixmap = QPixmap(self.photopath)
-        self.pic.setPixmap(pixmap)
+    def button3Clicked(self):
+        self.photoChange("./prediction/")
+        self.buttonChange()
+
+    def button4Clicked(self):
+        self.photoChange("./prediction/")
+        self.buttonChange()
+
+    def photoChange(self, imagepath):
+        if sys.argv[1] == 'train':
+            self.photoind += 1
+            self.photopath = imagepath+'userpic'+ str(self.photoind) +'.jpg'
+            pixmap = QPixmap(self.photopath)
+            pixmap = pixmap.scaled(640,640)
+            self.pic.setPixmap(pixmap)
+        elif sys.argv[1] == 'predict':
+            self.photoind += 1
+            self.predictpath = './prediction/userpic' + str(self.photoind) + '.jpg'
+            pixmap = QPixmap(self.predictpath)
+            pixmap = pixmap.scaled(640,640)
+            self.pic.setPixmap(pixmap)
+    def buttonChange(self):
+        self.prediction = predict.predictlikedislike(self.predictpath)
+
+        dislikechance = self.prediction[0][0]
+        dislikechance = float("{0:.2f}".format(dislikechance))
+        self.pushButton_3.setText('Dislike - ' + str(dislikechance))
+        
+
+        likechance = self.prediction[0][1]
+        likechance = float("{0:.2f}".format(likechance))
+        self.pushButton_4.setText('Like - ' + str(likechance))
 
     def keyPressEvent(self, e):
-        if e.key() == Qt.Key_Escape:
-            self.close()
-        elif e.key() == Qt.Key_1:
-            self.button1Clicked()
-        elif e.key() == Qt.Key_2:
-            self.button2Clicked()
+        if sys.argv[1] == "train":
+            if e.key() == Qt.Key_Escape:
+                self.close()
+            elif e.key() == Qt.Key_1:
+                self.button1Clicked()
+            elif e.key() == Qt.Key_2:
+                self.button2Clicked()
+        elif sys.argv[1] == "predict":
+            if e.key() == Qt.Key_Escape:
+                self.close()
+            elif e.key() == Qt.Key_1:
+                self.button3Clicked()
+            elif e.key() == Qt.Key_2:
+                self.button4Clicked()
     
 if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    ex = App()
-    sys.exit(app.exec_())
+    if len(sys.argv) > 1:
+        if sys.argv[1] in ["train", "predict"]:
+            app = QApplication(sys.argv)
+            ex = App()
+            sys.exit(app.exec_())
+        else:
+            print("Use the train or predict argument")
+    else:
+        print("Use the train or predict argument")
