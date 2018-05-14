@@ -471,6 +471,10 @@ and make sure to have TensorFlow installed if you intend on training the network
 
 You must authorize Tinder to use your facebook, this can be done by copying **tinder_config.py**, filling in your credentials, and then renaming the copy to **config.py**.
 
+Then simply run ** run.py **. This will take a while as it must gather about 1000 images. This is the bare minimum amount necessary as it takes about 500 images in each classification to really train the network.
+
+![example](example1.png)
+
 ##Components
 -(Tinder's unofficial api)[https://github.com/fbessez/Tinder]
 -(CV-Tricks CNN tutorial)[https://github.com/sankit1/cv-tricks.com]
