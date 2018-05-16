@@ -24,11 +24,18 @@ class App(QWidget):
         self.trainpath = './training_data/'
         self.predictpath = './prediction/userpic' + str(self.photoind) + '.jpg'
         self.pic = QLabel(self)
+        self.make_directories()
         if sys.argv[1] == 'predict':
             self.prediction = predict.predictlikedislike(self.predictpath)
         self.initUI()
 
-
+    def make_directories(self):
+        if not os.path.isdir(self.trainpath):
+            os.makedirs(self.trainpath)
+        if not os.path.isdir(self.trainpath+'like/'):
+            os.makedirs(self.trainpath+'like/')
+        if not os.path.isdir(self.trainpath+'dislike/'):
+            os.makedirs(self.trainpath+'dislike/')
  
     def initUI(self):
         self.setWindowTitle(self.title)
@@ -47,7 +54,7 @@ class App(QWidget):
             self.pushButton_2 = QtWidgets.QPushButton('Like',self)
             self.pushButton_2.setGeometry(QtCore.QRect(360, 645, 92, 30))
             self.pushButton_2.setObjectName("pushButton_2")
-            self.pushButton_2.clicked.connect(self.button1Clicked)
+            self.pushButton_2.clicked.connect(self.button2Clicked)
 
         elif sys.argv[1] == 'predict':
             pixmap = QPixmap(self.predictpath)
