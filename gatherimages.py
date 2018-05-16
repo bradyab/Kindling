@@ -27,10 +27,7 @@ if api.authverif() == True:
             ppl= search['data']['results']
 
             for i in range(len(ppl)):
-                if foldercount.numfile("./images/") < 1000:
-                    break
-                if foldercount.numfile("./images/") % 100
-                    print(str(foldercount.numfile("./images/"))+" images gathered")                
+                
                 if ppl[i]['user']['_id'] in repeats:
                     pass
                 else:
