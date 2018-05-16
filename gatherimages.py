@@ -21,26 +21,37 @@ if api.authverif() == True:
         y = 1
         repeats = []
 
+        # Create images folder if necessary
+        if not os.path.isdir('./images'):
+            os.makedirs('./images')
+
         while foldercount.numfile("./images/") < 1000:
 
             search =  api.get_recs_v2()
-            ppl= search['data']['results']
+            try:
+                ppl= search['data']['results']
 
-            for i in range(len(ppl)):
-                
-                if ppl[i]['user']['_id'] in repeats:
-                    pass
-                else:
-                    pics = feat.get_photos(ppl[i]['user'])
-                    path = './images/'
-                    for j in pics:
-                        x = foldercount.numfile(path)+1
-                        file = urllib.request.urlopen(j)
-                        img = Image.open(file)
-                        img.save(path+'userpic'+str(x)+".jpg",'JPEG')
-                    repeats.append(ppl[i]['user']['_id'])
+                for i in range(len(ppl)):
+                    
+                    if ppl[i]['user']['_id'] in repeats:
+                        pass
+                    else:
+                        pics = feat.get_photos(ppl[i]['user'])
+                        path = './images/'
+                        for j in pics:
+                            x = foldercount.numfile(path)+1
+                            file = urllib.request.urlopen(j)
+                            img = Image.open(file)
+                            img.save(path+'userpic'+str(x)+".jpg",'JPEG')
+                        repeats.append(ppl[i]['user']['_id'])
+            except KeyError:
+                print("Key error...")
             
         print("Gathering images for predictions")
+
+        # Create prediction folder if necessary
+        if not os.path.isdir('./prediction'):
+            os.makedirs('./prediction')
 
         while foldercount.numfile("./prediction/") < 100:
 
