@@ -26,6 +26,8 @@ if api.authverif() == True:
             os.makedirs('./images')
 
         while foldercount.numfile("./images/") < 1000:
+            sleep(0.5)
+            print(foldercount.numfile('./images/'))
 
             search =  api.get_recs_v2()
             try:
@@ -54,6 +56,7 @@ if api.authverif() == True:
             os.makedirs('./prediction')
 
         while foldercount.numfile("./prediction/") < 100:
+            sleep(0.5)
 
             search =  api.get_recs_v2()
             ppl= search['data']['results']
