@@ -12,20 +12,21 @@ import predict
  
 class App(QWidget):
     global photoind, pic, pushButton
-    def __init__(self):
+    def __init__(self, operation):
         super().__init__()
-        self.title = 'Kindling - '+ sys.argv[1]
+        self.title = 'Kindling - '+ operation #sys.argv[1]
+        self.operation = operation
         self.left = 10
         self.top = 10
         self.width = 640
         self.height = 680
+        self.trainpath = './training_data/'
         self.photoind = 1
         self.photopath = './images/userpic'+ str(self.photoind) +'.jpg'
-        self.trainpath = './training_data/'
         self.predictpath = './prediction/userpic' + str(self.photoind) + '.jpg'
         self.pic = QLabel(self)
         self.make_directories()
-        if sys.argv[1] == 'predict':
+        if operation == 'predict': #sys.argv[1] == 'predict':
             self.prediction = predict.predictlikedislike(self.predictpath)
         self.initUI()
 
@@ -41,7 +42,7 @@ class App(QWidget):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
 
-        if sys.argv[1] == 'train':
+        if self.operation == 'train': #sys.argv[1] == 'train':
             pixmap = QPixmap(self.photopath)
             pixmap = pixmap.scaled(640,640)
             self.pic.setPixmap(pixmap)
@@ -56,7 +57,7 @@ class App(QWidget):
             self.pushButton_2.setObjectName("pushButton_2")
             self.pushButton_2.clicked.connect(self.button2Clicked)
 
-        elif sys.argv[1] == 'predict':
+        elif self.operation == 'predict': #sys.argv[1] == 'predict':
             pixmap = QPixmap(self.predictpath)
             pixmap = pixmap.scaled(640,640)
             self.pic.setPixmap(pixmap)
@@ -93,11 +94,11 @@ class App(QWidget):
             self.close()
     def button1Clicked(self):
         self.sortimagetrain("dislike")
-        self.photoChange("./images/")
+        #self.photoChange("./images/")
 
     def button2Clicked(self):
         self.sortimagetrain('like')
-        self.photoChange("./images/")   
+        #self.photoChange("./images/")   
 
     def button3Clicked(self):
         self.photoChange("./prediction/")
@@ -108,18 +109,20 @@ class App(QWidget):
         self.buttonChange()
 
     def photoChange(self, imagepath):
-        if sys.argv[1] == 'train':
+        if self.operation == 'train': #sys.argv[1] == 'train':
             self.photoind += 1
             self.photopath = imagepath+'userpic'+ str(self.photoind) +'.jpg'
             pixmap = QPixmap(self.photopath)
             pixmap = pixmap.scaled(640,640)
             self.pic.setPixmap(pixmap)
-        elif sys.argv[1] == 'predict':
+        elif self.operation == 'predict': #sys.argv[1] == 'predict':
             self.photoind += 1
             self.predictpath = './prediction/userpic' + str(self.photoind) + '.jpg'
             pixmap = QPixmap(self.predictpath)
             pixmap = pixmap.scaled(640,640)
             self.pic.setPixmap(pixmap)
+
+        return self.photoind
     def buttonChange(self):
         self.prediction = predict.predictlikedislike(self.predictpath)
 
@@ -133,14 +136,14 @@ class App(QWidget):
         self.pushButton_4.setText('Like - ' + str(likechance))
 
     def keyPressEvent(self, e):
-        if sys.argv[1] == "train":
+        if self.operation == 'train': #sys.argv[1] == "train":
             if e.key() == Qt.Key_Escape:
                 self.close()
             elif e.key() == Qt.Key_1:
                 self.button1Clicked()
             elif e.key() == Qt.Key_2:
                 self.button2Clicked()
-        elif sys.argv[1] == "predict":
+        elif self.operation == 'predict': #sys.argv[1] == "predict":
             if e.key() == Qt.Key_Escape:
                 self.close()
             elif e.key() == Qt.Key_1:
@@ -148,13 +151,13 @@ class App(QWidget):
             elif e.key() == Qt.Key_2:
                 self.button4Clicked()
     
-if __name__ == '__main__':
-    if len(sys.argv) > 1:
-        if sys.argv[1] in ["train", "predict"]:
-            app = QApplication(sys.argv)
-            ex = App()
-            sys.exit(app.exec_())
-        else:
-            print("Use the train or predict argument")
-    else:
-        print("Use the train or predict argument")
+# if __name__ == '__main__':
+#     if len(sys.argv) > 1:
+#         if sys.argv[1] in ["train", "predict"]:
+#             app = QApplication(sys.argv)
+#             ex = App()
+#             sys.exit(app.exec_())
+#         else:
+#             print("Use the train or predict argument")
+#     else:
+#         print("Use the train or predict argument")
