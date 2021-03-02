@@ -14,7 +14,6 @@ import config
 import json
 import foldercount
 import progressbar
-
 if api.authverif() == True:
         print("Gathering images from nearby users for training...")
         # print(api.get_self())
@@ -29,8 +28,10 @@ if api.authverif() == True:
             sleep(0.5)
             print(foldercount.numfile('./images/'))
 
-            search =  api.get_recs_v2()
+            # search =  api.get_recommendations() #{'status': 400}, 'error': ''
+            search = api.get_recs_v2() # {'meta': {'status': 400}, 'error': {'message': 'NO_POSITION', 'code': 40001}}
             try:
+                import pdb; pdb.set_trace()
                 ppl= search['data']['results']
 
                 for i in range(len(ppl)):
